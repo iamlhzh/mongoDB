@@ -133,5 +133,31 @@ public class MongoQueryController {
         return map;
     }
 
+    /**
+     * 分页查询
+     *
+     * @return
+     */
+    @RequestMapping(value = "getAnimalPageOuery", method = RequestMethod.GET)
+    public Map<String, Object> getAnimalPageOuery(int page, int pageSize) {
+        Map<String, Object> map = new HashMap<>();
+        Pageable born = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Order.desc("percent")));
+        Query query = Query.query(Criteria.where("name").is("dog"));
+        query.with(born);
+        List<Animals> animalsList = mongoTemplate.find(query, Animals.class, "animals");
+        map.put("animalsListPage", animalsList);
+        return map;
+    }
+
+    @RequestMapping(value = "getAnimalMany", method = RequestMethod.GET)
+    public Map<String, Object> getAnimalMany() {
+        Map<String, Object> map = new HashMap<>();
+        Query query = Query.query(Criteria.where("name").in("dog", "pig", "cat"));
+        query.with(Sort.by(Sort.Order.desc("percent")));
+        List<Animals> animalsList = mongoTemplate.find(query, Animals.class, "animals");
+        map.put("animalsListPage", animalsList);
+        return map;
+    }
+
 
 }
