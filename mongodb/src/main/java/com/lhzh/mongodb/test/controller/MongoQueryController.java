@@ -159,5 +159,14 @@ public class MongoQueryController {
         return map;
     }
 
+    @RequestMapping(value = "getAnimalCount", method = RequestMethod.GET)
+    public Map<String, Object> getAnimalCount() {
+        Map<String, Object> map = new HashMap<>();
+        Query query = Query.query(Criteria.where("name").in("dog", "pig", "cat"));
+        long animals = mongoTemplate.count(query, Animals.class, "animals");
+        map.put("animals", animals);
+        return map;
+    }
+
 
 }
